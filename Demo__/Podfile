@@ -1,0 +1,11 @@
+platform :ios,’8.0‘
+
+target ‘Demo__’ do
+
+ pod ’Masonry‘
+
+ pod ‘FMDB’
+
+ pod "MTLFMDBAdapter"
+
+end

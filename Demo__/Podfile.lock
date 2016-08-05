@@ -1,0 +1,26 @@
+PODS:
+  - FMDB (2.6.2):
+    - FMDB/standard (= 2.6.2)
+  - FMDB/standard (2.6.2)
+  - Mantle (2.0.7):
+    - Mantle/extobjc (= 2.0.7)
+  - Mantle/extobjc (2.0.7)
+  - Masonry (1.0.1)
+  - MTLFMDBAdapter (0.3.0):
+    - FMDB (~> 2.3)
+    - Mantle (~> 2.0)
+
+DEPENDENCIES:
+  - FMDB
+  - Masonry
+  - MTLFMDBAdapter
+
+SPEC CHECKSUMS:
+  FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
+  Mantle: bc40bb061d8c2c6fb48d5083e04d928c3b7f73d9
+  Masonry: a1a931a0d08870ed8ae415a2ea5ea68ebcac77df
+  MTLFMDBAdapter: 62ffbdb9ed154b33697f6bded0e839ff6d5a2aa0
+
+PODFILE CHECKSUM: c6063682b2e722f2a041c3c007f7a903e5316313
+
+COCOAPODS: 1.1.0.beta.1
