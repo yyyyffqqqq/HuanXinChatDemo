@@ -145,8 +145,7 @@ FMDatabase *db;
             
             if (_isEditButNew) {
                 stmt = @"update MyOrder set identifier = ?, customerName = ?, tableName = ?, shippingMethod = ?, tableSize = ? where identifier = ?";
-                params = @[_order.identifier, _order.customerName, _order.tableName, _order.shippingMethod, _order.tableSize, _order.identifier];
-                
+                params = [NSArray arrayWithObjects:_order.identifier, _order.customerName, _order.tableName, _order.shippingMethod, _order.tableSize, nil];
                 //下面的model转sql语句有问题，属性列与参数个数不匹配；
 //                stmt = [MTLFMDBAdapter updateStatementForModel:_order];
 //                params = [MTLFMDBAdapter columnValues:_order];
@@ -303,7 +302,7 @@ FMDatabase *db;
     //[udpSocket sendData:[message dataUsingEncoding:NSUTF8StringEncoding] withTimeout:-1 tag:10];//该函数只能用户已经连接的socket
     //可以根据bonjour获取到的服务并解析，将其中的host和port作为参数传入
     [udpSocket sendData:[NSJSONSerialization dataWithJSONObject:_sendMessage options:NSJSONWritingPrettyPrinted error:nil] toHost:[NSString stringWithFormat:@"%@",_serviceIps[0]]   port:8400 withTimeout:-1 tag:10];//客户端socket发送组播或是广播 根据host的ip地址来定
-    [udpSocket beginReceiving:nil];//必须要  开始准备接收数据
+    [udpSocket beginReceiving:nil];//必须要  开始准备接收数据,接受数据才知道是否发送消息成功
 }
 
 #pragma mark- GCDAsyncUdpSocketDelegate

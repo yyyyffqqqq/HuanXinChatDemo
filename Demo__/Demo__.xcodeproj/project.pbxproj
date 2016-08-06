@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14534F1C1D55D5CB00D8E4D7 /* UDPSocketSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 14534F1B1D55D5CB00D8E4D7 /* UDPSocketSingleton.m */; };
 		14E93BD11D54654A00988BF2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 14E93BD01D54654A00988BF2 /* main.m */; };
 		14E93BD41D54654A00988BF2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14E93BD31D54654A00988BF2 /* AppDelegate.m */; };
 		14E93BD71D54654A00988BF2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14E93BD61D54654A00988BF2 /* ViewController.m */; };
@@ -20,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		14534F1A1D55D5CB00D8E4D7 /* UDPSocketSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDPSocketSingleton.h; sourceTree = "<group>"; };
+		14534F1B1D55D5CB00D8E4D7 /* UDPSocketSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UDPSocketSingleton.m; sourceTree = "<group>"; };
 		14E93BCC1D54654A00988BF2 /* Demo__.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo__.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14E93BD01D54654A00988BF2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		14E93BD21D54654A00988BF2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -63,6 +66,56 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		14534F1D1D55FC1900D8E4D7 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				14E93BD51D54654A00988BF2 /* ViewController.h */,
+				14E93BD61D54654A00988BF2 /* ViewController.m */,
+				14E93BE91D54660A00988BF2 /* NewOrderViewController.h */,
+				14E93BEA1D54660A00988BF2 /* NewOrderViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		14534F1E1D55FC3600D8E4D7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				14E93BEF1D54661100988BF2 /* OrderTableViewCell.h */,
+				14E93BF01D54661100988BF2 /* OrderTableViewCell.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		14534F1F1D55FC3D00D8E4D7 /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				14E93BEB1D54660A00988BF2 /* OrderModel.h */,
+				14E93BEC1D54660A00988BF2 /* OrderModel.m */,
+				14534F1A1D55D5CB00D8E4D7 /* UDPSocketSingleton.h */,
+				14534F1B1D55D5CB00D8E4D7 /* UDPSocketSingleton.m */,
+			);
+			name = Class;
+			sourceTree = "<group>";
+		};
+		14534F201D55FC5600D8E4D7 /* Order */ = {
+			isa = PBXGroup;
+			children = (
+				14534F1D1D55FC1900D8E4D7 /* Controller */,
+				14534F1E1D55FC3600D8E4D7 /* View */,
+				14534F1F1D55FC3D00D8E4D7 /* Class */,
+			);
+			name = Order;
+			sourceTree = "<group>";
+		};
+		14534F211D55FCBB00D8E4D7 /* Third */ = {
+			isa = PBXGroup;
+			children = (
+				14E93BE61D5465FD00988BF2 /* GCDAsyncUdpSocket.h */,
+				14E93BE71D5465FD00988BF2 /* GCDAsyncUdpSocket.m */,
+			);
+			name = Third;
+			sourceTree = "<group>";
+		};
 		14E93BC31D54654A00988BF2 = {
 			isa = PBXGroup;
 			children = (
@@ -84,18 +137,10 @@
 		14E93BCE1D54654A00988BF2 /* Demo__ */ = {
 			isa = PBXGroup;
 			children = (
-				14E93BEF1D54661100988BF2 /* OrderTableViewCell.h */,
-				14E93BF01D54661100988BF2 /* OrderTableViewCell.m */,
-				14E93BE91D54660A00988BF2 /* NewOrderViewController.h */,
-				14E93BEA1D54660A00988BF2 /* NewOrderViewController.m */,
-				14E93BEB1D54660A00988BF2 /* OrderModel.h */,
-				14E93BEC1D54660A00988BF2 /* OrderModel.m */,
-				14E93BE61D5465FD00988BF2 /* GCDAsyncUdpSocket.h */,
-				14E93BE71D5465FD00988BF2 /* GCDAsyncUdpSocket.m */,
+				14534F211D55FCBB00D8E4D7 /* Third */,
+				14534F201D55FC5600D8E4D7 /* Order */,
 				14E93BD21D54654A00988BF2 /* AppDelegate.h */,
 				14E93BD31D54654A00988BF2 /* AppDelegate.m */,
-				14E93BD51D54654A00988BF2 /* ViewController.h */,
-				14E93BD61D54654A00988BF2 /* ViewController.m */,
 				14E93BDB1D54654A00988BF2 /* Assets.xcassets */,
 				14E93BDD1D54654A00988BF2 /* LaunchScreen.storyboard */,
 				14E93BE01D54654A00988BF2 /* Info.plist */,
@@ -244,6 +289,7 @@
 				14E93BD71D54654A00988BF2 /* ViewController.m in Sources */,
 				14E93BEE1D54660A00988BF2 /* OrderModel.m in Sources */,
 				14E93BED1D54660A00988BF2 /* NewOrderViewController.m in Sources */,
+				14534F1C1D55D5CB00D8E4D7 /* UDPSocketSingleton.m in Sources */,
 				14E93BD41D54654A00988BF2 /* AppDelegate.m in Sources */,
 				14E93BD11D54654A00988BF2 /* main.m in Sources */,
 				14E93BF11D54661100988BF2 /* OrderTableViewCell.m in Sources */,

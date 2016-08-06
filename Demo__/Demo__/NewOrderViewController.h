@@ -16,6 +16,6 @@
 
 @property NSInteger editAtIndex;
 
-@property OrderModel *order; //接受编辑时的初始数据；
+@property (strong,nonatomic) OrderModel *order; //接受编辑时的初始数据；
 
 @end

@@ -81,7 +81,6 @@
         make.bottom.mas_equalTo(self.contentView.mas_bottom).offset(-30);
     }];
     
-
 }
 
 

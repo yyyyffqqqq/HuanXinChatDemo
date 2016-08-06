@@ -11,21 +11,21 @@
 #import "NewOrderViewController.h"
 
 #import "OrderTableViewCell.h"
-#import "GCDAsyncUdpSocket.h"
-
 
 #import "OrderModel.h"
 #import <FMDB/FMDB.h>
 #import <Mantle/Mantle.h>
 #import <MTLFMDBAdapter/MTLFMDBAdapter.h>
 
-@interface ViewController ()<GCDAsyncUdpSocketDelegate> {
+#import "GCDAsyncUdpSocket.h"
+#import "UDPSocketSingleton.h"
+
+@interface ViewController (){
     FMDatabase *db;
 }
 
 @property (strong, nonatomic) NSMutableArray<OrderModel*> *dataArrays; //存储订单列表数据；
 
-@property GCDAsyncUdpSocket *udpSocket8400;
 
 @end
 
@@ -36,7 +36,13 @@
     
     [self configurationInitData];
     
-    [self startReciveUdpBroadcast:_udpSocket8400 port:8400];
+//    [self startReciveUdpBroadcast:_udpSocket8400 port:8400];
+    
+    [[UDPSocketSingleton sharedInstance] startReciveUdpBroadcastWithPort:8400];
+    
+    
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receiveDataFromUdpSocketNotifi:) name:didReceiveDataFromUdpSocketNotification object:nil];
     
     [self queryDb];
 }
@@ -45,11 +51,40 @@
     [super viewWillAppear:animated];
     
 }
+//收到客户端iPad发送的消息后进行处理
+-(void)receiveDataFromUdpSocketNotifi:(NSNotification *)notifi{
+    NSLog(@"object=====%@",notifi.object);
+    NSLog(@"userInfo=====%@",notifi.userInfo);
+    
+    OrderModel *order = [OrderModel new];
+    order.shippingMethod = [notifi.userInfo objectForKey:@"shippingMethod"];
+    order.customerName = [notifi.userInfo objectForKey:@"customerName"];
+    order.tableName = [notifi.userInfo objectForKey:@"tableName"];
+    order.tableSize = [notifi.userInfo objectForKey:@"tableSize"];
+
+    //收到master iPad广播的消息就保存到数据库,
+    if (![[notifi.userInfo objectForKey:@"isEditButNew"] boolValue]) {
+        [self saveDataToDB:order];
+    }
+
+
+    if ([[notifi.userInfo objectForKey:@"isEditButNew"] intValue] == 0) {
+        [_dataArrays addObject:order];
+    } else { //
+        [_dataArrays replaceObjectAtIndex:[[notifi.userInfo objectForKey:@"index"] intValue] withObject:order];
+    }
+    
+    [self.tableView reloadData];
+
+    //收到消息后作出响应
+    //    NSString *jsonString = @"回复的消息..." ;
+    [((GCDAsyncUdpSocket*)notifi.object) sendData:[notifi.userInfo objectForKey:@"UdpData"] toAddress:[notifi.userInfo objectForKey:@"UdpAddress"] withTimeout:-1 tag:10];
+}
 
 - (void)configurationInitData {
     _dataArrays = [[NSMutableArray alloc]init];
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 20, self.view.bounds.size.width, self.view.bounds.size.height) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -95,46 +130,85 @@
     
 }
 
-//开启服务端
-- (void)startReciveUdpBroadcast:(GCDAsyncUdpSocket *)aUdpSocket port:(int)port
-{
-    if (aUdpSocket == nil)
-    {
-        aUdpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
-        NSError *error = nil;
-        
-        if (![aUdpSocket bindToPort:port error:&error])
-        {
-            NSLog(@"udpSocket Error binding: %@", error);
-            return;
-        }
-        if (![aUdpSocket beginReceiving:&error])
-        {
-            NSLog(@"udpSocket Error receiving: %@", error);
-            return;
-        }
-        
-        NSLog(@"start Receive Broadcast:%@============== ,%d",aUdpSocket,port);
-        
-        //如果当前用户是master iPad，就可以广播，否则不可以；
-        [aUdpSocket enableBroadcast:YES error:&error];
-        
-    }
-    
-    if(port == 8400)
-    {
-        _udpSocket8400 = aUdpSocket;
-    }
-}
+////开启服务端
+//- (void)startReciveUdpBroadcast:(GCDAsyncUdpSocket *)aUdpSocket port:(int)port
+//{
+//    if (aUdpSocket == nil)
+//    {
+//        aUdpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
+//        NSError *error = nil;
+//        
+//        if (![aUdpSocket bindToPort:port error:&error])
+//        {
+//            NSLog(@"udpSocket Error binding: %@", error);
+//            return;
+//        }
+//        if (![aUdpSocket beginReceiving:&error])
+//        {
+//            NSLog(@"udpSocket Error receiving: %@", error);
+//            return;
+//        }
+//        
+//        NSLog(@"start Receive Broadcast:%@============== ,%d",aUdpSocket,port);
+//        
+//        //如果当前用户是master iPad，就可以广播，否则不可以；
+//        [aUdpSocket enableBroadcast:YES error:&error];
+//        
+//    }
+//    
+//    if(port == 8400)
+//    {
+//        _udpSocket8400 = aUdpSocket;
+//    }
+//}
+//
+////接受其他客户端发送来的数据
+//- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext
+//{
+//    NSString *msg = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//    NSLog(@"sever receive data .... %@", msg);
+//    
+//    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+//    OrderModel *order = [OrderModel new];
+//    order.shippingMethod = [dic objectForKey:@"shippingMethod"];
+//    order.customerName = [dic objectForKey:@"customerName"];
+//    order.tableName = [dic objectForKey:@"tableName"];
+//    order.tableSize = [dic objectForKey:@"tableSize"];
+//    
+//    //收到master iPad广播的消息就保存到数据库,
+//    if (![[dic objectForKey:@"isEditButNew"] boolValue]) {
+//        [self saveDataToDB:order];
+//    }
+//    
+//    
+//    if ([[dic objectForKey:@"isEditButNew"] intValue] == 0) {
+//        [_dataArrays addObject:order];
+//    } else { //
+//        [_dataArrays replaceObjectAtIndex:[[dic objectForKey:@"index"] intValue] withObject:order];
+//    }
+//    
+//    
+//    [self.tableView reloadData];
+//    
+//    NSString *host = nil;
+//    uint16_t port = 0;
+//    [GCDAsyncUdpSocket getHost:&host port:&port fromAddress:address];
+//    //可获取客户端socket的ip和端口，不过直接打印address是空的
+//    NSLog(@"Adress = %@ %i",host,port);
+//    
+//    //收到消息后作出响应
+//    //    NSString *jsonString = @"回复的消息..." ;
+//    [sock sendData:data toAddress:address withTimeout:-1 tag:10];
+//}
 
 - (void)saveDataToDB:(OrderModel*)order {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     
-    // Sets the database filename
+    // 设置数据库文件名
     NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"Order.sqlite"];
     
-    // Tell FMDB where the database is
+    //获取数据库对象
     db = [FMDatabase databaseWithPath:filePath];
     
     if ([db open]) {
@@ -157,44 +231,7 @@
     
     
 }
-//接受其他客户端发送来的数据
-- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext
-{
-    NSString *msg = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"sever receive data .... %@", msg);
-    
-    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    OrderModel *order = [OrderModel new];
-    order.shippingMethod = [dic objectForKey:@"shippingMethod"];
-    order.customerName = [dic objectForKey:@"customerName"];
-    order.tableName = [dic objectForKey:@"tableName"];
-    order.tableSize = [dic objectForKey:@"tableSize"];
-    
-    //收到master iPad广播的消息就保存到数据库,
-    if (![[dic objectForKey:@"isEditButNew"] boolValue]) {
-        [self saveDataToDB:order];
-    }
-    
-    
-    if ([[dic objectForKey:@"isEditButNew"] intValue] == 0) {
-        [_dataArrays addObject:order];
-    } else { //
-        [_dataArrays replaceObjectAtIndex:[[dic objectForKey:@"index"] intValue] withObject:order];
-    }
-    
-    
-    [self.tableView reloadData];
-    
-    NSString *host = nil;
-    uint16_t port = 0;
-    [GCDAsyncUdpSocket getHost:&host port:&port fromAddress:address];
-    //可获取客户端socket的ip和端口，不过直接打印address是空的
-    NSLog(@"Adress = %@ %i",host,port);
-    
-    //收到消息后作出响应
-    //    NSString *jsonString = @"回复的消息..." ;
-    [sock sendData:data toAddress:address withTimeout:-1 tag:10];
-}
+
 
 - (void)newOrder {
     NewOrderViewController *neworderVC = [NewOrderViewController new];
@@ -253,6 +290,10 @@
     editVC.title = @"编辑订单";
     [self showViewController:editVC sender:self];
     
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:didReceiveDataFromUdpSocketNotification object:nil];
 }
 
 @end
