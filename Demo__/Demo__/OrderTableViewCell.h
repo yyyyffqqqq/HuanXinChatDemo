@@ -10,13 +10,13 @@
 
 @interface OrderTableViewCell : UITableViewCell
 
-@property (strong, nonatomic) UILabel *shippingMethod; //下单方式
+@property (strong, nonatomic, readonly) UILabel *shippingMethod; //下单方式
 
-@property (strong, nonatomic) UILabel *customerName; //订单用户
+@property (strong, nonatomic, readonly) UILabel *customerName; //订单用户
 
-@property (strong, nonatomic) UILabel *tableName; //订单名
+@property (strong, nonatomic, readonly) UILabel *tableName; //订单名
 
-@property (strong, nonatomic) UILabel *tableSize; //订单量
+@property (strong, nonatomic, readonly) UILabel *tableSize; //订单量
 
 
 @end

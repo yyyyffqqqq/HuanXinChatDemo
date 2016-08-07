@@ -29,6 +29,7 @@
     [self.window makeKeyWindow];
     
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

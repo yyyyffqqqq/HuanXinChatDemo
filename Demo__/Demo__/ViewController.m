@@ -36,8 +36,6 @@
     
     [self configurationInitData];
     
-//    [self startReciveUdpBroadcast:_udpSocket8400 port:8400];
-    
     [[UDPSocketSingleton sharedInstance] startReciveUdpBroadcastWithPort:8400];
     
     

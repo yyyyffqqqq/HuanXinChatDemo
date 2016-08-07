@@ -12,10 +12,10 @@
 
 @interface NewOrderViewController : UIViewController
 
-@property BOOL isEditButNew; //NO新建,yes编辑
+@property (nonatomic,assign) BOOL isEditButNew; //NO新建,yes编辑
 
-@property NSInteger editAtIndex;
+@property (nonatomic,assign) NSInteger editAtIndex;
 
-@property (strong,nonatomic) OrderModel *order; //接受编辑时的初始数据；
+@property (nonatomic, strong) OrderModel *order; //接受编辑时的初始数据；
 
 @end

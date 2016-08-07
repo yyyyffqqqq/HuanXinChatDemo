@@ -16,7 +16,7 @@
 
 @implementation UDPSocketSingleton
 
-static UDPSocketSingleton * sharedSingleton = nil;
+static UDPSocketSingleton *sharedSingleton = nil;
 
 + (id)allocWithZone:(struct _NSZone *)zone
 {

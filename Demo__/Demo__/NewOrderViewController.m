@@ -35,12 +35,13 @@ FMDatabase *db;
 
 @property(strong,nonatomic) NSNetServiceBrowser *serviceBrowser;
 
-@property (strong,atomic) NSMutableArray *serviceList; //搜索到的服务列表，找出是名为master的服务并在保存订单时给给服务发送订单信息
-@property (strong,atomic) NSMutableArray *serviceIps; //搜索到的服务ip
+@property (strong, nonatomic) NSMutableArray *serviceList; //搜索到的服务列表，找出是名为master的服务并在保存订单时给给服务发送订单信息
 
-@property (strong,atomic) NSNetService *masterServiceIp;
+@property (strong, nonatomic) NSMutableArray *serviceIps; //搜索到的服务ip
 
-@property (strong,atomic) NSMutableDictionary *sendMessage;
+@property (strong, nonatomic) NSNetService *masterServiceIp;
+
+@property (strong, nonatomic) NSMutableDictionary *sendMessage;
 
 @end
 
