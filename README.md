@@ -1,2 +1,1 @@
-HuanXinChatDemo
-学习使用环信SDK集成聊天功能
+面试作品
